@@ -14,7 +14,7 @@ class Sacar:
                     print("Saldo insuficiente, favor realizar depósito.")
                     break
                 else:
-                    self.saldo -= fazer_saque  # Atualiza o saldo após o saque
+                    self.saldo -= fazer_saque
                     self.limiteUsado += 1
                     self.historico.append(f"Saque - R$ {fazer_saque:.2f}")
                     print(f"Saque de R$ {fazer_saque:.2f} realizado com sucesso!")
@@ -31,4 +31,4 @@ class Sacar:
         if self.limiteUsado == 3:
             print("Você utilizou todos os saques disponíveis por hoje. Volte amanhã!")
 
-        return self.saldo  # Retorna o saldo atualizado
+        return self.saldo
