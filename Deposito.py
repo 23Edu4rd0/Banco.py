@@ -1,22 +1,22 @@
-class Depositar: # cria a classe depositar
-    def __init__(self, saldo, historico): #self recebe os valores de variaveis e transforma para o objeto entender que so eles serão usados
-        self.saldo = saldo # self recebe o valor de saldo
-        self.historico = historico #self recebe o valor de historico
+class Depositar:  # Cria a classe Depositar
+    def __init__(self, saldo, historico):  # Inicializa a classe com saldo e histórico
+        self.saldo = saldo  # Armazena o saldo da conta
+        self.historico = historico  # Armazena o histórico de transações
 
-    def deposito(self): # metodo deposito recebe as variaveis self
-        while True: # Loop (obvio)
-            try: #tratamento de erros
-                deposito = float(input("Quanto você deseja depositar em sua conta? ")) #variavel local, definida como float
+    def deposito(self):  # Método de depósito
+        while True:  # Loop infinito até um depósito válido ser realizado
+            try:  # Tratamento de erro para garantir que o valor inserido seja válido
+                deposito = float(input("Quanto você deseja depositar em sua conta? "))  # Solicita o valor do depósito como float
 
-                if deposito <= 0: # não permitir que o usuario envie valores menores que 1
-                    print("O valor do depósito deve ser maior que zero.")
-                    continue # volta ao inicio do loop
+                if deposito <= 0:  # Verifica se o valor do depósito é menor ou igual a zero
+                    print("O valor do depósito deve ser maior que zero.")  # Informa o erro ao usuário
+                    continue  # Retorna ao início do loop para tentar novamente
 
-                self.saldo += deposito # self recebe os valores de deposito
-                self.historico.append(f"Depósito + R$ {deposito:.2f}") # adciona a lista historico a string
-                print(f"Depósito de R$ {deposito:.2f} realizado com sucesso!") # mostra ao usuario o deposito realizado e quando ele tem em conta
-                print(f"Saldo Atual: R$ {self.saldo:.2f}") 
-                return self.saldo #retorna o valor de saldo para ser usado
+                self.saldo += deposito  # Atualiza o saldo com o valor do depósito
+                self.historico.append(f"Depósito + R$ {deposito:.2f}")  # Adiciona o depósito ao histórico
+                print(f"Depósito de R$ {deposito:.2f} realizado com sucesso!")  # Confirma o depósito para o usuário
+                print(f"Saldo Atual: R$ {self.saldo:.2f}")  # Exibe o saldo atualizado
+                return self.saldo  # Retorna o saldo atualizado para ser usado
 
-            except ValueError: # se houver erro de valor
-                print("Digite um número válido.")
+            except ValueError:  # Captura erro de valor (quando o input não for um número válido)
+                print("Digite um número válido.")  # Informa o erro ao usuário
