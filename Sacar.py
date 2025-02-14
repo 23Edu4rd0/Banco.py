@@ -1,12 +1,9 @@
-from datetime import date
-
 class Sacar:
     def __init__(self, saldo, historico):
         self.saldo = saldo
         self.limiteUsado = 0
         self.limiteDiario = 3
         self.historico = historico
-        self.dataAtual = date.today()
 
     def saque(self):
         while self.limiteUsado < self.limiteDiario:
@@ -19,7 +16,7 @@ class Sacar:
                 else:
                     self.saldo -= fazer_saque
                     self.limiteUsado += 1
-                    self.historico.append(f"Horario: {self.dataAtual} - Saque - R$ {fazer_saque:.2f}")
+                    self.historico.append(f"Saque - R$ {fazer_saque:.2f}")
                     print(f"Saque de R$ {fazer_saque:.2f} realizado com sucesso!")
                     print(f"Saldo Atual: R$ {self.saldo:.2f}")
                     print(f"Saques restantes hoje: {self.limiteDiario - self.limiteUsado}")

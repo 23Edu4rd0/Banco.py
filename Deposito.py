@@ -1,10 +1,7 @@
-from datetime import date
-
 class Depositar:
-    def __init__(self, saldo, historico,):
+    def __init__(self, saldo, historico):
         self.saldo = saldo
         self.historico = historico
-        self.dataAtual = date.today()
 
     def deposito(self):
         while True:
@@ -16,8 +13,8 @@ class Depositar:
                     continue
 
                 self.saldo += deposito
-                self.historico.append(f"Horario: {self.dataAtual} Depósito + R$ {deposito:.2f}")
-                print(f"Depósito de R$ {deposito:.2f} - realizado com sucesso!")
+                self.historico.append(f"Depósito + R$ {deposito:.2f}")
+                print(f"Depósito de R$ {deposito:.2f} realizado com sucesso!")
                 print(f"Saldo Atual: R$ {self.saldo:.2f}")
                 return self.saldo
 
