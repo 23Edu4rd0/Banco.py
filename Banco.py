@@ -1,5 +1,4 @@
 import random
-
 from Extrato_total import extrato
 from historico_global import historico
 from models.cliente import Cliente
@@ -17,18 +16,19 @@ class Banco:
     def cadastrar_cliente(self):
         nome = input("Digite seu nome: ")
         cpf = input("Digite seu CPF: ")
-        email = input("Digite seu email: ")
+        data_nascimento = input("Digite sua data de nascimento: ")
 
         if cpf in self.clientes:
             print("Erro: CPF já cadastrado!")
             return
 
-        self.clientes[cpf] = Cliente(nome, cpf, email)
-        numero_conta = str(random.randint(1000,9999))
-        self.contas[numero_conta] = Conta(cpf, numero_conta)
+        senha = input("Digite sua senha:")
+        self.clientes[cpf] = Cliente(nome, cpf, data_nascimento)
+        numero_conta = str(random.randint(1000, 9999))
+        self.contas[senha] = Conta(cpf, senha)
 
         print(f"Cliente {nome} cadastrado com sucesso!")
-        print(f"Conta criada com sucesso! Seu número de conta é {numero_conta}.\nQuarde esse numero, ele sera importante para que você possa fazer login\n")
+        print(f"Conta criada com sucesso! Seu número de conta é {numero_conta}.")
 
     def login(self):
         cpf = input("Digite seu CPF para fazer login: ")
@@ -44,13 +44,15 @@ class Banco:
             return None, None
 
         print(f"Login realizado com sucesso para o cliente {self.clientes[cpf].nome}.")
-        numero_conta = input("Digite o número da sua conta: ")
+        senha = input("Digite a sua senha: ")
 
-        if numero_conta not in self.contas or self.contas[numero_conta].cpf != cpf:
+        if senha not in self.contas or self.contas[senha].cpf != cpf:
             print("Erro: Conta não encontrada!")
             return None, None
 
-        return cpf, numero_conta
+        print(f"\nSeja bem-vindo {self.clientes[cpf].nome}!")
+
+        return cpf, senha
 
     def extrato(self, numero_conta):
         if numero_conta in self.contas:
@@ -79,5 +81,50 @@ class Banco:
         else:
             print("Erro: Conta não encontrada!")
 
-    def cadastrar_conta(self):
-        pass
+    def transferir_fundo(self, numero_conta):
+        cpf_transferencia = input("Digite o CPF da conta que deseja transferir: ")
+
+        contas_destino = [num for num, conta in self.contas.items() if conta.cpf == cpf_transferencia]
+
+        if not contas_destino:
+            print("Erro: Nenhuma conta encontrada para esse CPF!")
+            return
+
+        if len(contas_destino) > 1:
+            conta_destino = input("Digite o número da conta para transferência: ")
+            if conta_destino not in contas_destino:
+                print("Erro: Conta inválida!")
+                return
+        else:
+            conta_destino = contas_destino[0]
+
+        print(f"Conta de destino: {self.clientes[cpf_transferencia].nome}")
+        try:
+            saldo_transferencia = float(input("Digite o valor a ser transferido: R$"))
+            if saldo_transferencia <= 0:
+                print("Erro: O valor deve ser positivo!")
+                return
+        except ValueError:
+            print("Erro: Valor inválido!")
+            return
+
+        if saldo_transferencia > self.contas[numero_conta].saldo:
+            print("Erro: Saldo insuficiente!")
+            return
+        if numero_conta == conta_destino:
+            print("Erro: Não é possivel transferir para a mesma conta!")
+            return
+
+        confirmacao = input(
+            f"Confirma a transferência de R$ {saldo_transferencia:.2f} para a conta {self.clientes[cpf_transferencia].nome}? [s/n] ").lower()
+
+        if confirmacao != "s":
+            print("Tranferencia cancelada!")
+            return
+
+        self.contas[numero_conta].saldo -= saldo_transferencia
+        self.contas[conta_destino].saldo += saldo_transferencia
+
+        self.historico.append(
+            f"{self.dataAtual} - Transferência de R$ {saldo_transferencia:.2f} para conta {self.clientes[cpf_transferencia].nome}")
+        print(f"Transferência de R$ {saldo_transferencia:.2f} para a conta {conta_destino} realizada com sucesso!")

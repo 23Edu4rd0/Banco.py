@@ -6,6 +6,7 @@ MENU = """
     [d] Depositar
     [s] Sacar
     [e] Extrato
+    [t] Transferir
     [l] Trocar de Usuario
     [q] Sair
 """
@@ -16,7 +17,6 @@ def login_ou_cadastrar():
 
         if escolha == "c":
             banco.cadastrar_cliente()
-            banco.cadastrar_conta()
             return banco.login()
 
         elif escolha == "l":
@@ -32,6 +32,10 @@ print("Bem-vindo ao banco Dudu")
 
 cpf, numero_conta = login_ou_cadastrar()
 
+
+
+
+
 while True:
     escolha = input(MENU).lower()
 
@@ -41,6 +45,8 @@ while True:
         banco.sacar_fundo(numero_conta)
     elif escolha == "e":
         banco.extrato(numero_conta)
+    elif escolha == "t":
+        banco.transferir_fundo(numero_conta)
     elif escolha == "l":
         cpf, numero_conta = login_ou_cadastrar()
     elif escolha == "q":

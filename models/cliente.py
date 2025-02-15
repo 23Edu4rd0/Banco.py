@@ -1,8 +1,9 @@
 class Cliente:
-    def __init__(self,nome,cpf,email):
+    def __init__(self,nome,cpf,dataNascimento):
         self.nome = nome
         self.cpf = cpf
-        self.email = email
+        self.data_nascimento = dataNascimento
+
 
 
 
