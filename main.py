@@ -16,8 +16,10 @@ def login_ou_cadastrar():
         escolha = input("\n[c] Cadastrar Cliente\n[l] Fazer Login\nEscolha: ").lower()
 
         if escolha == "c":
-            banco.cadastrar_cliente()
-            return banco.login()
+            cadastro = banco.cadastrar_cliente()
+            if cadastro:
+                return cadastro
+
 
         elif escolha == "l":
             resultado = banco.login()
@@ -25,8 +27,10 @@ def login_ou_cadastrar():
                 return resultado
             else:
                 print("Login falhou. Por favor, tente novamente.")
+                continue
         else:
             print("Operação inválida. Por favor, escolha 'c' para cadastrar ou 'l' para login.")
+            continue
 
 print("Bem-vindo ao banco Dudu")
 
