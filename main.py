@@ -9,6 +9,8 @@ MENU = """
     [t] Transferir
     [l] Trocar de Usuario
     [q] Sair
+
+Escolha:
 """
 
 def login_ou_cadastrar():
@@ -32,16 +34,18 @@ def login_ou_cadastrar():
             print("Operação inválida. Por favor, escolha 'c' para cadastrar ou 'l' para login.")
             continue
 
-print("Bem-vindo ao banco Dudu")
+print("Bem-vindo ao banco ConfetiBank")
+
 
 cpf, numero_conta = login_ou_cadastrar()
 
 
-
+print("O que você deseja fazer?")
 
 
 while True:
     escolha = input(MENU).lower()
+
 
     if escolha == "d":
         banco.depositar_fundo(numero_conta)
