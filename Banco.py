@@ -4,6 +4,7 @@ from historico_global import historico
 from models.cliente import Cliente
 from models.conta import Conta
 from datetime import datetime
+from Cpf import Cpf, DataNascimento
 
 
 class Banco:
@@ -14,45 +15,50 @@ class Banco:
         self.dataAtual = datetime.now().strftime('%d/%m/%Y %H:%M')
 
     def cadastrar_cliente(self):
-        nome = input("Digite seu nome: ")
-        cpf = input("Digite seu CPF: ")
-        data_nascimento = input("Digite sua data de nascimento: ")
+        nome = input("Digite seu nome: ").strip()
+        cpf = input("Digite seu CPF (Sem ponto ou traços): ").strip()
+        cpf_obj = Cpf(cpf)
+        
+        data_nascimento = input("Digite sua data de nascimento (Formato DDMMAAAA, sem barras): ")
+        data_nascimento_obj = DataNascimento(data_nascimento)
 
-        if cpf in self.clientes:
+        if cpf_obj.cpf in self.clientes:
             print("Erro: CPF já cadastrado!")
             return
 
-        senha = input("Digite sua senha:")
-        self.clientes[cpf] = Cliente(nome, cpf, data_nascimento)
+        senha = input("Digite sua senha: ").strip()
+        self.clientes[cpf_obj.cpf] = Cliente(nome, cpf_obj.cpf, data_nascimento_obj)
         numero_conta = str(random.randint(1000, 9999))
-        self.contas[senha] = Conta(cpf, senha)
+        self.contas[senha] = Conta(cpf_obj.cpf, senha)
 
         print(f"Cliente {nome} cadastrado com sucesso!")
         print(f"Conta criada com sucesso! Seu número de conta é {numero_conta}.")
+        
 
     def login(self):
-        cpf = input("Digite seu CPF para fazer login: ")
+        cpf = input("Digite seu CPF para fazer login: ").strip()
+        cpf_obj = Cpf(cpf)
 
-        if cpf not in self.clientes:
+        if cpf_obj.cpf not in self.clientes:
             print("Erro: Cliente não encontrado! Você precisa se cadastrar primeiro.")
             return None, None
 
-        contas_usuario = [num for num, conta in self.contas.items() if conta.cpf == cpf]
+        contas_usuario = [num for num, conta in self.contas.items() if conta.cpf == cpf_obj.cpf]
 
         if not contas_usuario:
             print("Erro: Nenhuma conta associada a este CPF!")
             return None, None
 
-        print(f"Login realizado com sucesso para o cliente {self.clientes[cpf].nome}.")
-        senha = input("Digite a sua senha: ")
+        print(f"Login realizado com sucesso para o cliente {self.clientes[cpf_obj.cpf].nome}.")
+        senha = input("Digite a sua senha: ").strip()
 
-        if senha not in self.contas or self.contas[senha].cpf != cpf:
+        if senha not in self.contas or self.contas[senha].cpf != cpf_obj.cpf:
             print("Erro: Conta não encontrada!")
             return None, None
 
-        print(f"\nSeja bem-vindo {self.clientes[cpf].nome}!")
+        print(f"\nSeja bem-vindo {self.clientes[cpf_obj.cpf].nome}!")
 
-        return cpf, senha
+        return cpf_obj.cpf, senha
 
     def extrato(self, numero_conta):
         if numero_conta in self.contas:
@@ -82,7 +88,7 @@ class Banco:
             print("Erro: Conta não encontrada!")
 
     def transferir_fundo(self, numero_conta):
-        cpf_transferencia = input("Digite o CPF da conta que deseja transferir: ")
+        cpf_transferencia = input("Digite o CPF da conta que deseja transferir: ").strip()
 
         contas_destino = [num for num, conta in self.contas.items() if conta.cpf == cpf_transferencia]
 
@@ -91,7 +97,7 @@ class Banco:
             return
 
         if len(contas_destino) > 1:
-            conta_destino = input("Digite o número da conta para transferência: ")
+            conta_destino = input("Digite o número da conta para transferência: ").strip()
             if conta_destino not in contas_destino:
                 print("Erro: Conta inválida!")
                 return
@@ -100,7 +106,7 @@ class Banco:
 
         print(f"Conta de destino: {self.clientes[cpf_transferencia].nome}")
         try:
-            saldo_transferencia = float(input("Digite o valor a ser transferido: R$"))
+            saldo_transferencia = float(input("Digite o valor a ser transferido: R$").strip())
             if saldo_transferencia <= 0:
                 print("Erro: O valor deve ser positivo!")
                 return

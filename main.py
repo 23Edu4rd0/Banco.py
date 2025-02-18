@@ -18,10 +18,9 @@ def login_ou_cadastrar():
         escolha = input("\n[c] Cadastrar Cliente\n[l] Fazer Login\nEscolha: ").lower()
 
         if escolha == "c":
-            cadastro = banco.cadastrar_cliente()
-            if cadastro:
-                return cadastro
-
+            banco.cadastrar_cliente()
+            print("Cadastro realizado com sucesso. Por favor, faça login.")
+            continue
 
         elif escolha == "l":
             resultado = banco.login()
@@ -36,16 +35,12 @@ def login_ou_cadastrar():
 
 print("Bem-vindo ao banco ConfetiBank")
 
-
 cpf, numero_conta = login_ou_cadastrar()
-
 
 print("O que você deseja fazer?")
 
-
 while True:
     escolha = input(MENU).lower()
-
 
     if escolha == "d":
         banco.depositar_fundo(numero_conta)
@@ -62,4 +57,3 @@ while True:
         break
     else:
         print("Operação inválida, por favor selecione novamente a operação desejada.")
-
